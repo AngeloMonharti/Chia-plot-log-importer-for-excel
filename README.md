@@ -8,21 +8,4 @@ Make sure you edit your user profile name in the Plot directory or it won't be a
 Look I literally have no coding knowledge I'm just an office email monkey who learned how to do VBA so critique the code all you want I don't care
 
 Here are the columns in order:
-Plot Name
-Plot Size
-Temp Directory Used
-Final Directory Used
-Bitfield Enabled (Y/N)
-Memory
-Buckets
-Threads
-Stripe
-Start time
-Phase 1 Complete
-Phase 2 Complete
-Phase 3 Complete
-Phase 4 Complete
-Phase 1 Duration (minutes)
-Phase 2 Duration (minutes)
-Phase 3 Duration (minutes)
-Phase 4 Duration (minutes)
+Plot Name, Plot Size, Temp Directory Used, Final Directory Used, Bitfield Enabled (Y/N), Memory, Buckets, Threads, Stripe, Start time, Phase 1 Complete, Phase 2 Complete, Phase 3 Complete, Phase 4 Complete, Phase 1 Duration (minutes), Phase 2 Duration (minutes), Phase 3 Duration (minutes), Phase 4 Duration (minutes)
