@@ -1,2 +1,8 @@
 # Chia-plot-log-importer-for-excel
 Imports information from the default chia log location into excel, useful for small time farmers and noobs
+
+Open excel -> options -> customize ribbon -> make sure "Developer" is checked on the right-hand list -> OK -> developer (new tab appears in the top menu bar) -> Visual Basic (first button on the left under the menu bar) -> Insert -> click "module" from the drop down -> copy and paste the code into the module window -> hit green arrow under the "debug" menu while the module is selected to run the macro. Alternatively, go back to the excel sheet and beside the Visual Basic button in the Developer tab that you clicked earlier, there is a "macros" button. Click that, select ChiaPlotInfo, click run. If you want to save the file, save as .xlsm (not .xlsx) so the macro module doesn't get deleted. 
+
+Make sure you edit your user profile name in the Plot directory or it won't be able to find the plot logs -> PlotDir = "C:\Users\USER\.chia\mainnet\plotter"
+
+Look I literally have no coding knowledge I'm just an office email monkey who learned how to do VBA so critique the code all you want I don't care
