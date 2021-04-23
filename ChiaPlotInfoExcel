@@ -1,0 +1,156 @@
+Sub ChiaPlotInfo()
+
+Dim fso As FileSystemObject
+Dim folder As folder
+Dim Filetext As TextStream
+
+Dim PlotDir, Textline As String
+
+Dim rPlotName, rPlotSize, rTemp, rDest, rBitfield, rMemory, rBucket, rThread, rStripe, rStart, _
+    rPhase1, rPhase2, rPhase3, rPhase4, rPhase1D, rPhase2D, rPhase3D, rPhase4D As Range
+Dim PlotName, PlotSize, Temp, Dest, Bitfield, Memory, Bucket, Thread, Stripe, Start, Phase1, Phase2, Phase3, Phase4, _
+    Phase1D, Phase2D, Phase3D, Phase4D As String
+
+PlotDir = "C:\Users\USER\.chia\mainnet\plotter"
+
+ActiveSheet.Range("A2:S100000").ClearContents
+
+Set fso = New FileSystemObject
+Set folder = fso.GetFolder(PlotDir)
+
+Set rPlotName = ActiveSheet.Range("A2")
+Set rPlotSize = ActiveSheet.Range("B2")
+Set rTemp = ActiveSheet.Range("C2")
+Set rDest = ActiveSheet.Range("D2")
+Set rBitfield = ActiveSheet.Range("E2")
+Set rMemory = ActiveSheet.Range("F2")
+Set rBucket = ActiveSheet.Range("G2")
+Set rThread = ActiveSheet.Range("H2")
+Set rStripe = ActiveSheet.Range("I2")
+Set rStart = ActiveSheet.Range("J2")
+Set rPhase1 = ActiveSheet.Range("K2")
+Set rPhase2 = ActiveSheet.Range("L2")
+Set rPhase3 = ActiveSheet.Range("M2")
+Set rPhase4 = ActiveSheet.Range("N2")
+Set rPhase1D = ActiveSheet.Range("O2")
+Set rPhase2D = ActiveSheet.Range("P2")
+Set rPhase3D = ActiveSheet.Range("Q2")
+Set rPhase4D = ActiveSheet.Range("R2")
+
+For Each File In folder.Files
+    If Right(LCase(File.Name), 4) = ".txt" Then 'probably not needed but ok
+        Set Filetext = File.OpenAsTextStream(ForReading)
+        Bitfield = "Y"
+        PlotName = ""
+        PlotSize = ""
+        Temp = ""
+        Dest = ""
+        Memory = ""
+        Bucket = ""
+        Thread = ""
+        Stripe = ""
+        Start = ""
+        Phase1 = ""
+        Phase1D = ""
+        Phase2 = ""
+        Phase2D = ""
+        Phase3 = ""
+        Phase3D = ""
+        Phase4 = ""
+        Phase4D = ""
+        Do While Not Filetext.AtEndOfStream 'do until all text has been read
+            Textline = Filetext.ReadLine 'Filetext is the readline in the textstream
+            
+                If InStr(1, Textline, "Starting plotting progress into temporary dirs:") Then
+            Temp = Right(Textline, Len(Textline) - 48) '48 is length of search string above
+                End If
+                If InStr(1, Textline, "Plot size is:") Then
+            PlotSize = "k" & Mid(Textline, 15, Len(Textline) - 14)
+                End If
+                If InStr(1, Textline, "Buffer size is:") Then
+            Memory = Right(Textline, Len(Textline) - 16)
+                End If
+                If InStr(1, Textline, "Using") And InStr(1, Textline, "buckets") Then
+            Bucket = Mid(Textline, 7, Len(Textline) - 14)
+                End If
+                If InStr(1, Textline, "Using") And InStr(1, Textline, "threads") Then
+            Thread = Mid(Textline, InStr(Textline, "g") + 2, InStr(Textline, "t") - 8)
+            Stripe = Right(Textline, Len(Textline) - 30 - Len(Thread))
+                End If
+                If InStr(1, Textline, "Starting phase 1") Then
+            Start = Mid(Textline, 70, 8)
+                End If
+                If InStr(1, Textline, "Time for phase 1") Then
+            Phase1 = Right(Textline, 13)
+            Phase1 = Left(Phase1, 8)
+            Phase1D = Mid(Textline, InStr(Textline, "=") + 2, InStr(Textline, "n") - 24)
+                End If
+                If InStr(1, Textline, "Time for phase 2") Then
+            Phase2 = Right(Textline, 13)
+            Phase2 = Left(Phase2, 8)
+            Phase2D = Mid(Textline, InStr(Textline, "=") + 2, InStr(Textline, "n") - 24)
+                End If
+                If InStr(1, Textline, "Time for phase 3") Then
+            Phase3 = Right(Textline, 13)
+            Phase3 = Left(Phase3, 8)
+            Phase3D = Mid(Textline, InStr(Textline, "=") + 2, InStr(Textline, "n") - 24)
+                End If
+                If InStr(1, Textline, "Time for phase 4") Then
+            Phase4 = Right(Textline, 13)
+            Phase4 = Left(Phase4, 8)
+            Phase4D = Mid(Textline, InStr(Textline, "=") + 2, InStr(Textline, "n") - 24)
+                End If
+                If InStr(1, Textline, "Renamed final file from") Then
+            PlotName = Right(Textline, 96)
+            PlotName = Left(PlotName, 95) 'cuts off last quotation
+            Dest = Mid(Textline, InStr(Textline, """") + 1, Len(Textline) - InStr(Textline, """"))
+            Dest = Mid(Dest, InStr(Dest, """") + 1, Len(Dest) - InStr(Dest, """"))
+            Dest = Mid(Dest, InStr(Dest, """") + 1, Len(Dest) - Len(PlotName) - 6) '6 is length of string before " and including both "s
+                End If
+                If InStr(1, Textline, "without bitfield") Then
+            Bitfield = "N"
+                End If
+        Loop
+        
+    rPlotName.Value = PlotName
+    rPlotSize.Value = PlotSize
+    rTemp.Value = Temp
+    rDest.Value = Dest
+    rBitfield.Value = Bitfield
+    rMemory.Value = Memory
+    rBucket.Value = Bucket
+    rThread.Value = Thread
+    rStripe.Value = Stripe
+    rStart.Value = Start
+    rPhase1.Value = Phase1
+    If Phase1D <> "" Then rPhase1D.Value = Phase1D / 60 'converts seconds to mins
+    rPhase2.Value = Phase2
+    If Phase2D <> "" Then rPhase2D.Value = Phase2D / 60
+    rPhase3.Value = Phase3
+    If Phase3D <> "" Then rPhase3D.Value = Phase3D / 60
+    rPhase4.Value = Phase4
+    If Phase4D <> "" Then rPhase4D.Value = Phase4D / 60
+    
+    Set rPlotName = rPlotName.Offset(1, 0)
+    Set rPlotSize = rPlotSize.Offset(1, 0)
+    Set rTemp = rTemp.Offset(1, 0)
+    Set rDest = rDest.Offset(1, 0)
+    Set rBitfield = rBitfield.Offset(1, 0)
+    Set rMemory = rMemory.Offset(1, 0)
+    Set rBucket = rBucket.Offset(1, 0)
+    Set rThread = rThread.Offset(1, 0)
+    Set rStripe = rStripe.Offset(1, 0)
+    Set rStart = rStart.Offset(1, 0)
+    Set rPhase1 = rPhase1.Offset(1, 0)
+    Set rPhase1D = rPhase1D.Offset(1, 0)
+    Set rPhase2 = rPhase2.Offset(1, 0)
+    Set rPhase2D = rPhase2D.Offset(1, 0)
+    Set rPhase3 = rPhase3.Offset(1, 0)
+    Set rPhase3D = rPhase3D.Offset(1, 0)
+    Set rPhase4 = rPhase4.Offset(1, 0)
+    Set rPhase4D = rPhase4D.Offset(1, 0)
+    
+    End If
+Next
+
+End Sub
