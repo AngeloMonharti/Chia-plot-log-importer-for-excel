@@ -11,7 +11,7 @@ Dim rPlotName, rPlotSize, rTemp, rDest, rBitfield, rMemory, rBucket, rThread, rS
 Dim PlotName, PlotSize, Temp, Dest, Bitfield, Memory, Bucket, Thread, Stripe, Start, Phase1, Phase2, Phase3, Phase4, _
     Phase1D, Phase2D, Phase3D, Phase4D As String
 
-PlotDir = "C:\Users\USER\.chia\mainnet\plotter"
+PlotDir = "C:\Users\USER\.chia\mainnet\plotter" 'ADD USER PROFILE NAME
 
 ActiveSheet.Range("A2:S100000").ClearContents
 
