@@ -123,6 +123,7 @@ For Each File In folder.Files
     rStripe.Value = Stripe
     rStart.Value = Start
     rPhase1.Value = Phase1
+    On Error Resume Next
     If Phase1D <> "" Then rPhase1D.Value = Phase1D / 60 'converts seconds to mins
     rPhase2.Value = Phase2
     If Phase2D <> "" Then rPhase2D.Value = Phase2D / 60
@@ -130,6 +131,7 @@ For Each File In folder.Files
     If Phase3D <> "" Then rPhase3D.Value = Phase3D / 60
     rPhase4.Value = Phase4
     If Phase4D <> "" Then rPhase4D.Value = Phase4D / 60
+    On Error GoTo 0
     
     Set rPlotName = rPlotName.Offset(1, 0)
     Set rPlotSize = rPlotSize.Offset(1, 0)
